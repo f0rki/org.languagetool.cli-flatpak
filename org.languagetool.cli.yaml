@@ -1,0 +1,26 @@
+---
+app-id: org.languagetool.cli
+runtime: org.freedesktop.Platform
+runtime-version: '19.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.openjdk11
+command: "/app/bin/entrypoint.sh"
+modules:
+  - name: openjdk
+    buildsystem: simple
+    build-commands:
+      - "/usr/lib/sdk/openjdk11/install.sh"
+  - name: languagetool
+    sources:
+      - type: archive
+        url: "https://www.languagetool.org/download/LanguageTool-4.9.1.zip"
+        sha256: 79d10fc225d66005360de292fae4c2b27bfd122a1419d8d9ce16e2b14cb7517b
+        dest: "languagetool-files"
+      - type: file
+        path: entrypoint.sh
+    buildsystem: simple
+    build-commands:
+      - install -D entrypoint.sh /app/bin/entrypoint.sh
+      - mkdir -p /app/lib/
+      - cp -r languagetool-files /app/lib/languagetool

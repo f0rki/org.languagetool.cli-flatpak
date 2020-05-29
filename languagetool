@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+network=""
+# wrap file args for use with file-forwarding
+for a in "$@"; do
+    if [[ -e $a ]]; then
+        a="@@ $(realpath "$a") @@"
+    fi
+    args="$args $a"
+done
+
+if [[ "$1" = "download-ngram" ]]; then
+  network="--share=network"
+fi
+
+exec flatpak run "$network" --file-forwarding org.languagetool.cli $args
